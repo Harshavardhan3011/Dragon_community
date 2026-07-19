@@ -1,26 +1,239 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@400;700;900&display=swap");
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ─── Dragon Up Design System ─────────────────────────────────────── */
+@theme {
+  /* Primary Backgrounds */
+  --color-dragon-bg-900: #030403;
+  --color-dragon-bg-800: #050705;
+  --color-dragon-bg-700: #080B08;
+
+  /* Secondary Backgrounds */
+  --color-dragon-bg-600: #0D110D;
+  --color-dragon-bg-500: #101510;
+  --color-dragon-bg-400: #151A15;
+
+  /* Brand Greens */
+  --color-dragon-neon: #00FF66;
+  --color-dragon-emerald: #00C853;
+  --color-dragon-dark-green: #064E2B;
+  --color-dragon-light-green: #7CFF9B;
+
+  /* Text */
+  --color-dragon-text: #F5FFF7;
+  --color-dragon-text-secondary: #A7B8AA;
+  --color-dragon-text-muted: #6D7D70;
+
+  /* Fonts */
+  --font-heading: "Orbitron", ui-monospace, monospace;
+  --font-body: "Inter", ui-sans-serif, system-ui, sans-serif;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* ─── Base Styles ──────────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-body);
+  background-color: var(--color-dragon-bg-900);
+  color: var(--color-dragon-text);
+  overflow-x: hidden;
+}
+
+/* ─── Custom Scrollbar ─────────────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-dragon-bg-800);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-dragon-dark-green);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-dragon-neon);
+}
+
+@supports not selector(::-webkit-scrollbar) {
+  html {
+    scrollbar-color: var(--color-dragon-dark-green) var(--color-dragon-bg-800);
+    scrollbar-width: thin;
+  }
+}
+
+/* ─── Selection ────────────────────────────────────────────────────── */
+::selection {
+  background: rgba(0, 255, 102, 0.25);
+  color: var(--color-dragon-text);
+}
+
+/* ─── Skip Link ────────────────────────────────────────────────────── */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 16px;
+  z-index: 9999;
+  padding: 12px 24px;
+  background: var(--color-dragon-neon);
+  color: var(--color-dragon-bg-900);
+  font-weight: 700;
+  border-radius: 0 0 8px 8px;
+  text-decoration: none;
+  transition: top 0.2s;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+/* ─── Gaming Background Layers ─────────────────────────────────────── */
+.gaming-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(ellipse at 20% 50%, rgba(0, 255, 102, 0.04) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, rgba(0, 200, 83, 0.03) 0%, transparent 40%),
+    radial-gradient(ellipse at 50% 80%, rgba(6, 78, 43, 0.05) 0%, transparent 45%),
+    var(--color-dragon-bg-900);
+}
+
+.gaming-bg::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(0, 255, 102, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 255, 102, 0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
+  -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
+}
+
+.gaming-bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.015'/%3E%3C/svg%3E");
+  opacity: 0.4;
+}
+
+/* ─── Glass Effect ─────────────────────────────────────────────────── */
+.glass {
+  background: rgba(5, 10, 6, 0.70);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(0, 255, 102, 0.16);
+}
+
+.glass-card {
+  background: rgba(8, 14, 9, 0.72);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(0, 255, 102, 0.16);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.glass-card:hover {
+  border-color: rgba(0, 255, 102, 0.55);
+  box-shadow: 0 0 24px rgba(0, 255, 102, 0.08);
+}
+
+/* ─── Glow Effects ─────────────────────────────────────────────────── */
+.glow-sm {
+  box-shadow: 0 0 12px rgba(0, 255, 102, 0.15);
+}
+
+.glow-md {
+  box-shadow: 0 0 24px rgba(0, 255, 102, 0.2);
+}
+
+.glow-text {
+  text-shadow: 0 0 20px rgba(0, 255, 102, 0.4);
+}
+
+/* ─── Brand Gradient ───────────────────────────────────────────────── */
+.gradient-brand {
+  background: linear-gradient(135deg, #00FF66 0%, #00C853 45%, #064E2B 100%);
+}
+
+.gradient-text {
+  background: linear-gradient(135deg, #00FF66 0%, #00C853 50%, #7CFF9B 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ─── Animations ───────────────────────────────────────────────────── */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 12px rgba(0, 255, 102, 0.2); }
+  50% { box-shadow: 0 0 24px rgba(0, 255, 102, 0.4); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 3s ease-in-out infinite;
+}
+
+.animate-shimmer {
+  background: linear-gradient(
+    90deg,
+    transparent 25%,
+    rgba(0, 255, 102, 0.1) 50%,
+    transparent 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 3s ease-in-out infinite;
+}
+
+/* ─── Reduced Motion ───────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* ─── Focus States ─────────────────────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid var(--color-dragon-neon);
+  outline-offset: 2px;
+}
+
+/* ─── Prevent body scroll when menu open ───────────────────────────── */
+body.menu-open {
+  overflow: hidden;
 }
