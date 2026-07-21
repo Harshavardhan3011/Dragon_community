@@ -87,8 +87,8 @@ export default function DragonModel() {
 
   return (
     <mesh ref={meshRef} position={[0.8, 0, 0]} castShadow receiveShadow>
-      {/* 3D Plane representing the dragon image */}
-      <planeGeometry args={[2.5, 2.5]} />
+      {/* 3D Circle representing the dragon image inside a circular mask */}
+      <circleGeometry args={[1.25, 64]} />
       <meshStandardMaterial
         map={texture}
         transparent={true}

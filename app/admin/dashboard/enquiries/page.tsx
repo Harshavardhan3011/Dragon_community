@@ -125,7 +125,7 @@ export default function AdminEnquiriesPage() {
             onChange={(e) => setSearch(e.target.value)}
             className="pl-10"
           />
-          <Search className="w-5 h-5 text-dragon-text-muted absolute left-3 bottom-3" />
+          <Search className="w-4 h-4 text-dragon-text-muted absolute left-3 top-1/2 -translate-y-1/2" />
         </div>
         <div className="w-full md:w-48">
           <Select

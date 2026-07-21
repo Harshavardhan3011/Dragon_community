@@ -80,14 +80,43 @@ export default function HeroSection() {
       aria-label="Hero"
       id="hero"
     >
+      {/* ── Cinematic Background Image ─────────────────────────── */}
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          zIndex: -3,
+          backgroundImage: 'url("/images/hero-bg.png")',
+          backgroundSize: "cover",
+          backgroundPosition: "center center",
+          backgroundRepeat: "no-repeat",
+          opacity: 0.30,
+          /* Mask edges completely so image bleeds into dark bg */
+          WebkitMaskImage:
+            "radial-gradient(ellipse 80% 90% at 50% 45%, black 30%, transparent 100%)",
+          maskImage:
+            "radial-gradient(ellipse 80% 90% at 50% 45%, black 30%, transparent 100%)",
+        }}
+      />
+      {/* Gradient vignette overlay to darken corners and edges */}
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          zIndex: -2,
+          background:
+            "radial-gradient(ellipse at center, transparent 20%, rgba(3,4,3,0.75) 70%, rgba(3,4,3,0.98) 100%)",
+        }}
+      />
+
       {/* Dynamic Smooth Background Video */}
       <BackgroundVideo src="/images/videos/dragon_up_bg.mp4" />
 
-      {/* Subtle overlay (max 10-20% opacity) for text readability */}
-      <div 
-        className="absolute inset-0 bg-black/15 pointer-events-none" 
-        style={{ zIndex: -1 }} 
-        aria-hidden="true" 
+      {/* Subtle dark overlay for text readability */}
+      <div
+        className="absolute inset-0 bg-black/10 pointer-events-none"
+        style={{ zIndex: -1 }}
+        aria-hidden="true"
       />
 
       <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full py-16 md:py-24">

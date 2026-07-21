@@ -1,11 +1,17 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Youtube, Instagram, MessageCircle, ArrowUp } from "lucide-react";
 import { siteConfig } from "@/config/site";
 import { footerQuickLinks, footerLegalLinks } from "@/config/navigation";
 
 export default function Footer() {
+  const pathname = usePathname();
+
+  if (pathname?.startsWith("/admin")) {
+    return null;
+  }
   return (
     <footer className="relative border-t border-dragon-neon/16 bg-dragon-bg-800/50">
       {/* Animated top border glow */}

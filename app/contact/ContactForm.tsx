@@ -15,6 +15,7 @@ import { useToast } from "@/components/ui/Toast";
 import { contactFormSchema, type ContactFormValues } from "@/lib/validations";
 import { contactTypes } from "@/config/social-links";
 import { siteConfig } from "@/config/site";
+import { sendContactEmail } from "@/lib/emailjs";
 
 export default function ContactForm() {
   const { addToast } = useToast();
@@ -31,23 +32,22 @@ export default function ContactForm() {
   });
 
   const onSubmit = async (data: ContactFormValues) => {
-    try {
-      const res = await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
+    const result = await sendContactEmail(data);
+    if (result.success) {
+      setReferenceId(result.referenceId);
+      setSubmitted(true);
+      reset();
+      addToast({
+        type: "success",
+        title: "Message sent!",
+        message: `Reference: ${result.referenceId}`,
       });
-      const json = await res.json();
-      if (res.ok && json.success) {
-        setReferenceId(json.data?.referenceId || "");
-        setSubmitted(true);
-        reset();
-        addToast({ type: "success", title: "Message sent!", message: `Reference: ${json.data?.referenceId}` });
-      } else {
-        addToast({ type: "error", title: "Failed to send", message: json.error || "Please try again." });
-      }
-    } catch {
-      addToast({ type: "error", title: "Network error", message: "Check your connection and try again." });
+    } else {
+      addToast({
+        type: "error",
+        title: "Failed to send",
+        message: "Please try again.",
+      });
     }
   };
 
@@ -125,7 +125,7 @@ export default function ContactForm() {
                 )}
                 <div className="flex items-center gap-3">
                   <Mail className="w-5 h-5 text-dragon-neon" />
-                  <div><p className="text-sm font-medium text-dragon-text">Business Email</p><p className="text-xs text-dragon-text-muted">business@dragonup.com</p></div>
+                  <div><p className="text-sm font-medium text-dragon-text">Business Email</p><p className="text-xs text-dragon-text-muted">DragonUpff@gmail.com</p></div>
                 </div>
               </div>
             </GamingCard>

@@ -4,20 +4,21 @@ import { db } from "@/lib/db";
 import { formatDate } from "@/lib/utils";
 
 async function getDashboardData() {
-  const [totalEnquiries, teamMembers, recentEnquiries, siteSetting] = await Promise.all([
+  const [totalEnquiries, teamMembers, totalContent, recentEnquiries, siteSetting] = await Promise.all([
     db.contactEnquiry.count(),
     db.teamMember.count({ where: { isActive: true } }),
+    db.newsArticle.count(),
     db.contactEnquiry.findMany({
       orderBy: { createdAt: "desc" },
       take: 10,
     }),
     db.siteSetting.findUnique({ where: { key: "site_status" } }),
   ]);
-  return { totalEnquiries, teamMembers, recentEnquiries, siteStatus: siteSetting?.value || "online" };
+  return { totalEnquiries, teamMembers, totalContent, recentEnquiries, siteStatus: siteSetting?.value || "online" };
 }
 
 export default async function AdminDashboardPage() {
-  const { totalEnquiries, teamMembers, recentEnquiries, siteStatus } = await getDashboardData();
+  const { totalEnquiries, teamMembers, totalContent, recentEnquiries, siteStatus } = await getDashboardData();
 
   const statusColors: Record<string, string> = {
     NEW: "text-dragon-neon bg-dragon-neon/10",
@@ -36,7 +37,7 @@ export default async function AdminDashboardPage() {
       <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
         <AdminStatCard label="Total Enquiries" value={totalEnquiries} icon={<Mail className="w-5 h-5" />} description="Contact form submissions" />
         <AdminStatCard label="Active Team Members" value={teamMembers} icon={<Users className="w-5 h-5" />} description="Current team roster" />
-        <AdminStatCard label="Homepage Sections" value={9} icon={<LayoutDashboard className="w-5 h-5" />} description="Phase 1 sections active" />
+        <AdminStatCard label="Content Articles" value={totalContent} icon={<LayoutDashboard className="w-5 h-5" />} description="CMS news articles" />
         <AdminStatCard
           label="Website Status"
           value={siteStatus === "online" ? "Online" : "Maintenance"}

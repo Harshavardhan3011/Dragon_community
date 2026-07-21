@@ -3,6 +3,7 @@ import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import LoadingScreen from "@/components/layout/LoadingScreen";
+import GamingBackground from "@/components/layout/GamingBackground";
 import { ToastProvider } from "@/components/ui/Toast";
 import { siteConfig } from "@/config/site";
 
@@ -56,7 +57,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <a href="#main-content" className="skip-link">
           Skip to main content
         </a>
-        <div className="gaming-bg" aria-hidden="true" />
+        <GamingBackground />
         <ToastProvider>
           <PerformanceProvider>
             <AudioProvider>

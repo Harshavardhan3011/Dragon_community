@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAnimationStore, IntroState } from "@/store/animation-store";
 import { useAudioStore } from "@/store/audio-store";
@@ -11,6 +12,9 @@ import IntroSkipButton from "@/components/ui/IntroSkipButton";
 import { Sparkles, Play } from "lucide-react";
 
 export default function CinematicIntro() {
+  const pathname = usePathname();
+
+  // ── All hooks must be declared before any conditional return ──────
   const { introState, setIntroState, setIntroPlayed } = useAnimationStore();
   const { soundEnabled, setSoundEnabled } = useAudioStore();
   const { quality } = usePerformanceStore();
@@ -18,6 +22,11 @@ export default function CinematicIntro() {
   const { playRoar, playFire, playClick } = useSound();
   const [mounted, setMounted] = useState(false);
   const [needsConsent, setNeedsConsent] = useState(true);
+
+  // ── Guard: skip cinematic intro on admin routes ──────────────────
+  if (pathname?.startsWith("/admin")) {
+    return null;
+  }
 
   useEffect(() => {
     setMounted(true);

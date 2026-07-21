@@ -33,7 +33,7 @@ export default function DragonScene() {
   }
 
   return (
-    <div className="fixed inset-0 w-full h-full z-0 pointer-events-none overflow-hidden select-none">
+    <div className="fixed inset-0 w-full h-full z-0 pointer-events-none select-none" style={{ overflow: "hidden" }}>
       <SceneErrorBoundary>
         <Canvas
           shadows={quality === "high"}

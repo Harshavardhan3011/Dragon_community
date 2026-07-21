@@ -237,3 +237,164 @@ body {
 body.menu-open {
   overflow: hidden;
 }
+
+/* ─── Z-Index Layer Hierarchy ──────────────────────────────────────── */
+/*
+  Layer 1: Background elements  → z-index: -3 to -1  (gaming-bg, hero-bg, overlays)
+  Layer 2: Dragon / WebGL scene → z-index: 0          (DragonScene canvas)
+  Layer 3: Page content         → z-index: 10         (ThreeProvider children)
+  Layer 4: Navbar               → z-index: 50         (fixed header)
+  Layer 5: Admin header/sidebar → z-index: 40         (admin shell)
+  Layer 6: Dropdowns / tooltips → z-index: 60         (UI overlays)
+  Layer 7: Modals               → z-index: 100        (dialog overlays)
+  Layer 8: Cinematic intro      → z-index: 150-200    (full-screen overlay)
+  Layer 9: Cursor trail canvas  → z-index: 190-200    (top of everything)
+*/
+
+:root {
+  --z-bg: -1;
+  --z-dragon: 0;
+  --z-content: 10;
+  --z-admin: 40;
+  --z-navbar: 50;
+  --z-dropdown: 60;
+  --z-modal: 100;
+  --z-intro: 150;
+  --z-cursor: 200;
+}
+
+/* ─── Admin Layout Isolation ────────────────────────────────────────── */
+/* Suppress global gaming-bg on admin routes via body class */
+.admin-page .gaming-bg {
+  display: none;
+}
+
+/* Ensure admin layout clips any overflow from public components */
+.admin-shell {
+  isolation: isolate;
+  position: relative;
+  z-index: 0;
+}
+
+/* Admin header should be above admin content but below modals */
+.admin-header {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-admin);
+}
+
+/* ─── Section Scroll Offset ─────────────────────────────────────────── */
+/* Account for fixed navbar (80px) so anchor links don't go under it */
+html {
+  scroll-padding-top: 80px;
+}
+
+/* ─── Section Transitions ───────────────────────────────────────────── */
+section {
+  position: relative;
+}
+
+/* Subtle fade between sections */
+section + section::before {
+  content: "";
+  display: block;
+  position: absolute;
+  top: -1px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(0, 255, 102, 0.08), transparent);
+  pointer-events: none;
+}
+
+/* ─── Improved Glassmorphism ─────────────────────────────────────────── */
+/* Slightly higher contrast border for better glass legibility */
+.glass {
+  background: rgba(5, 10, 6, 0.75);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(0, 255, 102, 0.18);
+}
+
+/* Enhanced glass card with consistent blur */
+.glass-card {
+  background: rgba(8, 14, 9, 0.78);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(0, 255, 102, 0.16);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+}
+
+.glass-card:hover {
+  background: rgba(8, 14, 9, 0.85);
+  border-color: rgba(0, 255, 102, 0.50);
+  box-shadow: 0 0 28px rgba(0, 255, 102, 0.09), 0 4px 16px rgba(0, 0, 0, 0.3);
+}
+
+/* ─── Responsive Spacing Utilities ──────────────────────────────────── */
+/* Consistent section inner padding */
+.section-inner {
+  max-width: 80rem; /* 1280px */
+  margin-inline: auto;
+  padding-inline: 1rem;
+}
+
+@media (min-width: 640px) {
+  .section-inner {
+    padding-inline: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .section-inner {
+    padding-inline: 2rem;
+  }
+}
+
+/* ─── Dragon Circular Mask Utility ──────────────────────────────────── */
+/* CSS-level fallback mask for dragon image to prevent square edges */
+.dragon-circle-mask {
+  border-radius: 9999px;
+  overflow: hidden;
+  clip-path: circle(50% at center);
+  -webkit-clip-path: circle(50% at center);
+}
+
+/* ─── Admin Sidebar Scroll ───────────────────────────────────────────── */
+/* Ensure sidebar does not overflow viewport height */
+.admin-sidebar-inner {
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-dragon-dark-green) transparent;
+}
+
+/* ─── Prevent gaming-bg from showing under admin layout ─────────────── */
+/* Admin dashboard routes set this via the admin layout wrapper */
+.admin-bg-suppress ~ .gaming-bg,
+.gaming-bg:has(~ .admin-shell) {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ─── Input & Form consistency ─────────────────────────────────────── */
+input, textarea, select {
+  font-family: var(--font-body);
+}
+
+/* ─── Table alignment ──────────────────────────────────────────────── */
+table {
+  border-collapse: collapse;
+}
+
+thead th {
+  white-space: nowrap;
+}
+
+/* ─── Focus States ─────────────────────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid var(--color-dragon-neon);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+

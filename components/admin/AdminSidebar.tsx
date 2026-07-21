@@ -2,12 +2,17 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, Mail, LogOut } from "lucide-react";
+import { LayoutDashboard, Mail, LogOut, FileText, Users, Settings, Youtube } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const navItems = [
   { label: "Overview", href: "/admin/dashboard", icon: LayoutDashboard },
   { label: "Enquiries", href: "/admin/dashboard/enquiries", icon: Mail },
+  { label: "Content", href: "/admin/dashboard/content", icon: FileText },
+  { label: "Team", href: "/admin/dashboard/team", icon: Users },
+  { label: "Guild Roster", href: "/admin/dashboard/guild", icon: Users },
+  { label: "YouTube Settings", href: "/admin/dashboard/youtube", icon: Youtube },
+  { label: "Settings", href: "/admin/dashboard/settings", icon: Settings },
 ];
 
 export default function AdminSidebar() {
@@ -19,7 +24,7 @@ export default function AdminSidebar() {
   };
 
   return (
-    <aside className="w-64 glass border-r border-dragon-neon/10 min-h-screen flex flex-col">
+    <aside className="w-64 shrink-0 glass border-r border-dragon-neon/10 h-screen sticky top-0 flex flex-col z-40">
       <div className="p-6 border-b border-dragon-neon/10">
         <Link href="/" className="flex items-center gap-2">
           <svg width="28" height="28" viewBox="0 0 32 32" fill="none" className="text-dragon-neon" aria-hidden="true">

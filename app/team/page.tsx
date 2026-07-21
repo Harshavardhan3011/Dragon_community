@@ -7,7 +7,7 @@ import SectionHeading from "@/components/ui/SectionHeading";
 import GamingCard from "@/components/ui/GamingCard";
 import Button from "@/components/ui/Button";
 import Badge from "@/components/ui/Badge";
-import { teamMembers } from "@/data/team";
+import { db } from "@/lib/db";
 
 export const metadata: Metadata = {
   title: "Team",
@@ -15,8 +15,16 @@ export const metadata: Metadata = {
   alternates: { canonical: "/team" },
 };
 
-export default function TeamPage() {
-  const activeMembers = teamMembers.filter((m) => m.isActive).sort((a, b) => a.displayOrder - b.displayOrder);
+export default async function TeamPage() {
+  const dbMembers = await db.teamMember.findMany({
+    where: { isActive: true },
+    orderBy: { displayOrder: "asc" },
+  });
+
+  const activeMembers = dbMembers.map((m) => ({
+    ...m,
+    skills: m.skills ? m.skills.split(",").map((s) => s.trim()).filter(Boolean) : [],
+  }));
 
   return (
     <PageTransition>
