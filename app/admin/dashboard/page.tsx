@@ -3,18 +3,40 @@ import AdminStatCard from "@/components/admin/AdminStatCard";
 import { db } from "@/lib/db";
 import { formatDate } from "@/lib/utils";
 
+export const dynamic = "force-dynamic";
+
 async function getDashboardData() {
-  const [totalEnquiries, teamMembers, totalContent, recentEnquiries, siteSetting] = await Promise.all([
-    db.contactEnquiry.count(),
-    db.teamMember.count({ where: { isActive: true } }),
-    db.newsArticle.count(),
-    db.contactEnquiry.findMany({
-      orderBy: { createdAt: "desc" },
-      take: 10,
-    }),
-    db.siteSetting.findUnique({ where: { key: "site_status" } }),
-  ]);
-  return { totalEnquiries, teamMembers, totalContent, recentEnquiries, siteStatus: siteSetting?.value || "online" };
+  try {
+    const [totalEnquiries, teamMembers, totalContent, recentEnquiries, siteSetting] = await Promise.all([
+      db.contactEnquiry.count().catch(() => 0),
+      db.teamMember.count({ where: { isActive: true } }).catch(() => 0),
+      db.newsArticle.count().catch(() => 0),
+      db.contactEnquiry
+        .findMany({
+          orderBy: { createdAt: "desc" },
+          take: 10,
+        })
+        .catch(() => []),
+      db.siteSetting.findUnique({ where: { key: "site_status" } }).catch(() => null),
+    ]);
+
+    return {
+      totalEnquiries: totalEnquiries || 0,
+      teamMembers: teamMembers || 0,
+      totalContent: totalContent || 0,
+      recentEnquiries: recentEnquiries || [],
+      siteStatus: siteSetting?.value || "online",
+    };
+  } catch (error) {
+    console.error("Failed to fetch admin dashboard stats:", error);
+    return {
+      totalEnquiries: 0,
+      teamMembers: 0,
+      totalContent: 0,
+      recentEnquiries: [],
+      siteStatus: "online",
+    };
+  }
 }
 
 export default async function AdminDashboardPage() {

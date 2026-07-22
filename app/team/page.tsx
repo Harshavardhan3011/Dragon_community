@@ -9,6 +9,8 @@ import Button from "@/components/ui/Button";
 import Badge from "@/components/ui/Badge";
 import { db } from "@/lib/db";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Team",
   description: "Meet the Dragon Up team — the passionate gamers and creators behind the Dragon Up gaming community.",
@@ -16,14 +18,20 @@ export const metadata: Metadata = {
 };
 
 export default async function TeamPage() {
-  const dbMembers = await db.teamMember.findMany({
-    where: { isActive: true },
-    orderBy: { displayOrder: "asc" },
-  });
+  let dbMembers: any[] = [];
+  try {
+    dbMembers = await db.teamMember.findMany({
+      where: { isActive: true },
+      orderBy: { displayOrder: "asc" },
+    });
+  } catch (error) {
+    console.error("Failed to fetch team members from DB:", error);
+    dbMembers = [];
+  }
 
   const activeMembers = dbMembers.map((m) => ({
     ...m,
-    skills: m.skills ? m.skills.split(",").map((s) => s.trim()).filter(Boolean) : [],
+    skills: m.skills ? m.skills.split(",").map((s: string) => s.trim()).filter(Boolean) : [],
   }));
 
   return (
@@ -61,7 +69,7 @@ export default async function TeamPage() {
                 {/* Skills */}
                 {member.skills && member.skills.length > 0 && (
                   <div className="flex flex-wrap justify-center gap-2 mb-4">
-                    {member.skills.map((skill) => (
+                    {member.skills.map((skill: string) => (
                       <span key={skill} className="px-2 py-1 bg-dragon-bg-600 text-dragon-text-muted text-[10px] rounded font-heading uppercase tracking-wide">
                         {skill}
                       </span>
